@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tax Pack Refresh Chain Demo</title>
+
+  <style>
+    :root {
+      --orange: #f28c38;
+      --light: #f4f7fa;
+      --mint: #d7fbf7;
+      --blue: #9dc3e6;
+      --dark: #274d62;
+      --teal: #29afaf;
+      --deep: #102733;
+      --white: #ffffff;
+      --text-soft: #d9e7ec;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, var(--dark), var(--deep));
+      color: var(--white);
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .layout {
+      max-width: 1350px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      margin-bottom: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      color: var(--mint);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      margin: 10px 0 0 0;
+      color: var(--text-soft);
+      font-size: 16px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(680px, 1fr) 390px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .browser-card {
+      overflow: hidden;
+      border-radius: 22px;
+      background: var(--light);
+      box-shadow: 0 24px 55px rgba(0,0,0,0.32);
+    }
+
+    .browser-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: var(--light);
+      border-bottom: 1px solid rgba(39,77,98,0.12);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot.red {
+      background: #ff5f57;
+    }
+
+    .dot.yellow {
+      background: #ffbd2e;
+    }
+
+    .dot.green {
+      background: #28c840;
+    }
+
+    .address-bar {
+      flex: 1;
+      margin-left: 12px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--dark);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .image-area {
+      padding: 18px;
+      background: var(--light);
+    }
+
+    .image-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--white);
+      box-shadow: 0 14px 32px rgba(0,0,0,0.18);
+    }
+
+    .chain-image {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .hotspot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 50%;
+      color: var(--white);
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hotspot::before {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.23;
+      animation: pulse 1.6s infinite;
+      z-index: -1;
+    }
+
+    .hotspot:hover {
+      transform: translate(-50%, -50%) scale(1.12);
+    }
+
+    .hotspot.active {
+      outline: 4px solid rgba(215,251,247,0.85);
+      box-shadow: 0 0 0 5px rgba(242,140,56,0.55), 0 16px 34px rgba(0,0,0,0.32);
+    }
+
+    .hotspot.done {
+      border: 3px solid var(--mint);
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.9);
+        opacity: 0.35;
+      }
+      70% {
+        transform: scale(1.55);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1.55);
+        opacity: 0;
+      }
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .progress-card,
+    .info-card,
+    .flow-card {
+      border-radius: 20px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+
+    .progress-card {
+      padding: 14px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+
+    .progress-head strong {
+      color: var(--white);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      background: rgba(255,255,255,0.16);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 14%;
+      background: var(--orange);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .restart-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 9px 12px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      color: var(--white);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .restart-btn:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .info-header {
+      padding: 18px;
+      background: var(--orange);
+      color: var(--white);
+      transition: background 0.25s ease;
+    }
+
+    .info-header h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .info-header p {
+      margin: 8px 0 0 0;
+      font-size: 13px;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .info-body {
+      min-height: 330px;
+      padding: 18px;
+      background: var(--white);
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .detail-text {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--dark);
+    }
+
+    .talk-track {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--blue);
+      background: var(--light);
+    }
+
+    .talk-track h3 {
+      margin: 0 0 8px 0;
+      color: var(--dark);
+      font-size: 14px;
+    }
+
+    .talk-track p {
+      margin: 0;
+      color: var(--dark);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .next-btn {
+      width: 100%;
+      padding: 13px 15px;
+      border: none;
+      border-radius: 999px;
+      background: var(--dark);
+      color: var(--white);
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .next-btn:hover {
+      background: #1e3f52;
+      transform: translateY(-1px);
+    }
+
+    .flow-card {
+      padding: 18px;
+    }
+
+    .flow-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .flow-title span {
+      color: var(--orange);
+    }
+
+    .flow-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .flow-list li {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 9px;
+      align-items: start;
+      color: var(--text-soft);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .flow-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--dark);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1100px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .side-panel {
+        max-width: 820px;
+        width: 100%;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding: 14px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .main-grid {
+        gap: 16px;
+      }
+
+      .hotspot {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+
+      .info-body {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="layout">
+
+      <header class="header">
+        <div class="badge">✦ Interactive Workiva chain walkthrough</div>
+        <h1>Tax Pack Refresh Chain Demo</h1>
+        <p>Click the numbered hotspots on the chain to explain each part of the automation flow.</p>
+      </header>
+
+      <main class="main-grid">
+
+        <section class="browser-card">
+          <div class="browser-bar">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+            <div class="address-bar">Workiva Workspace / Chain Automation Demo</div>
+          </div>
+
+          <div class="image-area">
+            <div class="image-wrap">
+
+              <!-- If your GitHub file is named exactly "screenshot" without .png, change this to src="screenshot" -->
+              screenshot.png
+
+              <button class="hotspot active"
+                      style="left: 12.5%; top: 8%; background:#29afaf; color:#29afaf;"
+                      data-index="0">
+                <span style="color:white;">1</span>
+              </button>
+
+              <button class="hotspot"
+                      style="left: 13%; top: 23.5%; background:#f28c38; color:#f28c38;"
+                      data-index="1">
+                <span style="color:white;">2</span>
+              </button>
+
+              <button class="hotspot"
+                      style="left: 13%; top: 31%; background:#29afaf; color:#29afaf;"
+                      data-index="2">
+                <span style="color:white;">3</span>
+              </button>
+
+              <button class="hotspot"
+                      style="left: 14%; top: 40%; background:#f28c38; color:#f28c38;"
+                      data-index="3">
+                <span style="color:white;">4</span>
+              </button>
+
+              <button class="hotspot"
+                      style="left: 57%; top: 64%; background:#29afaf; color:#29afaf;"
+                      data-index="4">
+                <span style="color:white;">5</span>
+              </button>
+
+              <button class="hotspot"
+                      style="left: 57%; top: 88%; background:#f28c38; color:#f28c38;"
+                      data-index="5">
+                <span style="color:white;">6</span>
+              </button>
+
+              <button class="hotspot"
+                      style="left: 57%; top: 96%; background:#29afaf; color:#29afaf;"
+                      data-index="6">
+                <span style="color:white;">7</span>
+              </button>
+
+            </div>
+          </div>
+        </section>
+
+        <aside class="side-panel">
+
+          <section class="progress-card">
+            <div class="progress-head">
+              <span>Demo progress</span>
+              <strong id="progressText">14%</strong>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <button class="restart-btn" onclick="restartDemo()">↻ Restart walkthrough</button>
+          </section>
+
+          <section class="info-card">
+            <div class="info-header" id="infoHeader">
+              <h2 id="stepTitle">1. Inputs</h2>
+              <p id="stepShort">Users provide the folder name and select the refresh option.</p>
+            </div>
+
+            <div class="info-body">
+              <div>
+                <p class="detail-text" id="stepDetail">
+                  Users provide the folder name containing the tax packs and select whether they wish to refresh incoming connections, outgoing connections, or all connections.
+                </p>
+
+                <div class="talk-track">
+                  <h3>Client-friendly talk track</h3>
+                  <p id="talkTrack">
+                    “This step makes the process flexible from the start. The user can decide which folder should be processed and what type of connection refresh should be performed.”
+                  </p>
+                </div>
+              </div>
+
+              <button class="next-btn" onclick="nextStep()">Next explanation ›</button>
+            </div>
+          </section>
+
+          <section class="flow-card">
+            <div class="flow-title">
+              <span>▷</span>
+              Suggested demo flow
+            </div>
+
+            <ul class="flow-list">
+              <li><div class="flow-number">1</div><div>User provides the folder name and refresh preference</div></li>
+              <li><div class="flow-number">2</div><div>Chain locates the requested folder</div></li>
+              <li><div class="flow-number">3</div><div>Only spreadsheet files are selected</div></li>
+              <li><div class="flow-number">4</div><div>Iterator processes each tax pack spreadsheet</div></li>
+              <li><div class="flow-number">5</div><div>Conditional logic determines the refresh path</div></li>
+              <li><div class="flow-number">6</div><div>The chain generates a status log</div></li>
+              <li><div class="flow-number">7</div><div>The master results spreadsheet is updated</div></li>
+            </ul>
+          </section>
+
+        </aside>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const brand = {
+      orange: "#f28c38",
+      teal: "#29afaf",
+      dark: "#274d62"
+    };
+
+    const hotspots = [
+      {
+        id: "inputs",
+        number: 1,
+        title: "1. Inputs",
+        short: "Users provide the folder name and select the refresh option.",
+        detail: "Users provide the folder name containing the tax packs and select whether they wish to refresh incoming connections, outgoing connections, or all connections.",
+        talk: "“This step makes the process flexible from the start. The user can decide which folder should be processed and what type of connection refresh should be performed.”",
+        color: brand.teal
+      },
+      {
+        id: "locate-folder",
+        number: 2,
+        title: "2. Locate requested folder",
+        short: "The chain searches the workspace for the requested folder.",
+        detail: "The chain looks through the workspace folders until it finds the folder that matches the user's request. This ensures that the refresh logic is applied to the correct tax pack folder.",
+        talk: "“This step helps reduce manual navigation. Instead of manually searching for the folder, the chain identifies the requested folder automatically.”",
+        color: brand.orange
+      },
+      {
+        id: "spreadsheet-only",
+        number: 3,
+        title: "3. Select spreadsheet files only",
+        short: "The chain filters the folder and keeps only spreadsheet files.",
+        detail: "The chain checks the contents of the selected folder and keeps only spreadsheet files. Other file types are ignored because the refresh process should only apply to tax pack spreadsheets.",
+        talk: "“This step keeps the process controlled. The chain avoids refreshing irrelevant files and only continues with the spreadsheet files that are part of the tax pack process.”",
+        color: brand.teal
+      },
+      {
+        id: "iterator",
+        number: 4,
+        title: "4. Iterator",
+        short: "The iterator goes through each spreadsheet one by one.",
+        detail: "The iterator processes each tax pack spreadsheet individually. This allows the chain to apply the same refresh logic consistently across all selected files.",
+        talk: "“This step makes the process scalable. Whether the folder contains a few tax packs or many tax packs, the chain can process each spreadsheet using the same logic.”",
+        color: brand.orange
+      },
+      {
+        id: "conditional",
+        number: 5,
+        title: "5. Conditional",
+        short: "The chain checks which refresh option the user selected.",
+        detail: "The chain looks at the user's refresh request and determines whether to refresh incoming connections, outgoing connections, or both. Based on this decision, the chain follows the correct refresh path.",
+        talk: "“This step makes the automation dynamic. The chain does not need separate templates for each refresh scenario because the conditional logic decides the correct path.”",
+        color: brand.teal
+      },
+      {
+        id: "generate-results",
+        number: 6,
+        title: "6. Generate results",
+        short: "The chain creates a status log after the refresh is completed.",
+        detail: "Once the chain has completed the refresh action, a status log will appear. The chain uses this log to generate the chain run results.",
+        talk: "“This step helps make the refresh process repeatable and controlled. Instead of manually opening each tax pack, the chain applies the selected refresh logic and records the outcome for review.”",
+        color: brand.orange
+      },
+      {
+        id: "update-results",
+        number: 7,
+        title: "7. Update chain results",
+        short: "The master spreadsheet is updated with the chain results.",
+        detail: "The chain updates the master results spreadsheet based on the generated log status. This creates a central overview of the refresh outcome for each processed tax pack.",
+        talk: "“This final step gives the team a clear overview of what happened during the chain run. The results can be reviewed centrally instead of checking each file manually.”",
+        color: brand.teal
+      }
+    ];
+
+    let selectedIndex = 0;
+    let completed = new Set([0]);
+
+    const stepTitle = document.getElementById("stepTitle");
+    const stepShort = document.getElementById("stepShort");
+    const stepDetail = document.getElementById("stepDetail");
+    const talkTrack = document.getElementById("talkTrack");
+    const infoHeader = document.getElementById("infoHeader");
+    const progressText = document.getElementById("progressText");
+    const progressFill = document.getElementById("progressFill");
+    const hotspotButtons = document.querySelectorAll(".hotspot");
+
+    function renderStep() {
+      const item = hotspots[selectedIndex];
+
+      stepTitle.textContent = item.title;
+      stepShort.textContent = item.short;
+      stepDetail.textContent = item.detail;
+      talkTrack.textContent = item.talk;
+      infoHeader.style.backgroundColor = item.color;
+
+      completed.add(selectedIndex);
+
+      hotspotButtons.forEach((button, index) => {
+        button.classList.remove("active");
+        button.classList.remove("done");
+
+        if (index === selectedIndex) {
+          button.classList.add("active");
+        }
+
+        if (completed.has(index)) {
+          button.classList.add("done");
+        }
+      });
+
+      const progress = Math.round((completed.size / hotspots.length) * 100);
+      progressText.textContent = progress + "%";
+      progressFill.style.width = progress + "%";
+    }
+
+    function selectStep(index) {
+      selectedIndex = index;
+      renderStep();
+    }
+
+    function nextStep() {
+      selectedIndex = (selectedIndex + 1) % hotspots.length;
+      renderStep();
+    }
+
+    function restartDemo() {
+      selectedIndex = 0;
+      completed = new Set([0]);
+      renderStep();
+    }
+
+    hotspotButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const index = Number(button.getAttribute("data-index"));
+        selectStep(index);
+      });
+    });
+
+    renderStep();
+  </script>
+</body>
+</html>

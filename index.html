@@ -7,81 +7,109 @@
   <title>Tax Pack Refresh Chain - Interactive Walkthrough</title>
 
   <style>
+
     :root {
-      --brand-orange: #e89b3d;
-      --brand-light: #f8fafc;
-      --brand-mint: #d9f5ef;
-      --brand-blue: #a9c7dc;
-      --brand-dark: #243f4f;
-      --brand-teal: #3aa6a6;
+      --brand-orange: #f28c2f;
+      --brand-light: #f7f9fb;
+      --brand-mint: #c9fff2;
+      --brand-blue: #91d1f4;
+      --brand-dark: #173949;
+      --brand-teal: #39a6a6;
+      --panel-dark: #2e4a58;
+      --panel-border: rgba(255, 255, 255, 0.18);
       --background: #ffffff;
-      --shadow-panel: 0 24px 60px -20px rgba(0, 0, 0, 0.45);
+      --shadow-panel: 0 14px 34px rgba(4, 22, 32, 0.18);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      background: var(--brand-dark);
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Calibri, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, var(--brand-dark), #162833);
-      color: var(--brand-light);
+      font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+      background: var(--brand-dark);
+      color: #ffffff;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    button {
+      font: inherit;
     }
 
     .page {
       min-height: 100vh;
-      padding: 24px;
+      padding: 4px 14px 14px;
     }
 
     .container {
-      max-width: 1400px;
+      width: 100%;
+      max-width: 1440px;
       margin: 0 auto;
+    }
+
+    header {
+      padding-top: 0;
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      padding: 6px 12px;
+      gap: 7px;
+      min-height: 26px;
+      margin: 0 0 12px;
+      padding: 5px 11px;
       border-radius: 999px;
-      background: rgba(248, 250, 252, 0.1);
-      color: var(--brand-mint);
-      font-size: 14px;
+      background: rgba(151, 199, 215, 0.17);
+      color: #c8fff4;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 500;
+    }
+
+    .badge svg {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 14px;
+      stroke: currentColor;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(34px, 5vw, 58px);
-      line-height: 1.05;
-      letter-spacing: -1px;
-      font-family: Calibri, "Segoe UI", sans-serif;
+      font-size: clamp(38px, 4vw, 46px);
+      line-height: 1.04;
+      letter-spacing: -1.25px;
+      font-weight: 800;
     }
 
     .intro {
-      margin-top: 12px;
-      max-width: 760px;
-      color: var(--brand-blue);
-      font-size: 18px;
-      line-height: 1.5;
+      margin: 12px 0 0;
+      max-width: 850px;
+      color: #a8dcfa;
+      font-size: 16px;
+      line-height: 1.4;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
-      gap: 24px;
-      margin-top: 24px;
+      grid-template-columns: minmax(0, 2fr) minmax(350px, 1fr);
+      gap: 22px;
+      margin-top: 22px;
       align-items: stretch;
     }
 
     .browser-panel {
+      min-width: 0;
       overflow: hidden;
-      border-radius: 28px;
+      border-radius: 24px;
       background: var(--brand-light);
       box-shadow: var(--shadow-panel);
-      min-height: 850px;
       display: flex;
       flex-direction: column;
     }
@@ -90,28 +118,22 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 16px 24px;
-      border-bottom: 1px solid rgba(169, 199, 220, 0.5);
+      height: 62px;
+      padding: 0 21px;
+      border-bottom: 1px solid #bfd0db;
       background: var(--brand-light);
     }
 
     .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      flex: 0 0 11px;
     }
 
-    .red {
-      background: #f87171;
-    }
-
-    .yellow {
-      background: #facc15;
-    }
-
-    .green {
-      background: #4ade80;
-    }
+    .red { background: #ff616c; }
+    .yellow { background: #ffc114; }
+    .green { background: #1fca66; }
 
     .address-bar {
       flex: 1;
@@ -119,8 +141,10 @@
       padding: 10px 16px;
       border-radius: 999px;
       background: #ffffff;
-      color: var(--brand-dark);
-      font-size: 14px;
+      color: #173949;
+      font-size: 12px;
+      line-height: 1;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
     }
 
     .image-wrapper {
@@ -128,121 +152,102 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 16px;
+      padding: 14px 34px;
       background: var(--brand-light);
     }
 
     .image-area {
       position: relative;
       width: 100%;
-      max-width: 1400px;
-      border-radius: 20px;
       overflow: hidden;
+      border-radius: 19px;
       background: #ffffff;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 10px 24px rgba(18, 44, 57, 0.16);
     }
 
     .image-area img {
       display: block;
       width: 100%;
       height: auto;
+      user-select: none;
     }
 
     .hotspot {
       position: absolute;
       transform: translate(-50%, -50%);
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 50%;
       border: 3px solid #ffffff;
-      color: var(--brand-light);
+      color: #ffffff;
+      font-size: 15px;
+      line-height: 30px;
       font-weight: 700;
+      text-align: center;
       cursor: pointer;
       z-index: 2;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
-      font-family: Calibri, "Segoe UI", sans-serif;
-      font-size: 15px;
+      box-shadow: 0 5px 12px rgba(13, 46, 60, 0.28);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
     .hotspot:hover {
-      transform: translate(-50%, -50%) scale(1.12);
+      transform: translate(-50%, -50%) scale(1.08);
     }
 
-    .hotspot.teal {
-      background: var(--brand-teal);
-    }
-
-    .hotspot.orange {
-      background: var(--brand-orange);
-    }
+    .hotspot.teal { background: #32a4a1; }
+    .hotspot.orange { background: #f18a31; }
 
     .hotspot.active {
-      border-color: var(--brand-orange);
-      box-shadow: 0 0 0 5px rgba(217, 245, 239, 0.8), 0 10px 24px rgba(0, 0, 0, 0.35);
+      box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.82),
+        0 0 0 5px rgba(242, 140, 47, 0.72),
+        0 5px 12px rgba(13, 46, 60, 0.28);
     }
 
     .hotspot.completed:not(.active) {
-      border-color: var(--brand-mint);
+      border-color: #e9fff9;
     }
 
     .hotspot::before {
-      content: "";
-      position: absolute;
-      inset: -4px;
-      border-radius: 999px;
-      background: inherit;
-      opacity: 0.25;
-      z-index: -1;
-      animation: ping 1.6s infinite;
-    }
-
-    @keyframes ping {
-      0% {
-        transform: scale(1);
-        opacity: 0.35;
-      }
-
-      75%,
-      100% {
-        transform: scale(1.8);
-        opacity: 0;
-      }
+      content: none;
     }
 
     .side-panel {
+      min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
 
     .progress-card,
     .flow-card {
-      border: 1px solid rgba(248, 250, 252, 0.15);
-      border-radius: 28px;
-      background: rgba(248, 250, 252, 0.1);
-      padding: 20px;
-      box-shadow: var(--shadow-panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 22px;
+      background: var(--panel-dark);
+      padding: 19px;
+      box-shadow: none;
     }
 
     .progress-top {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 8px;
-      color: var(--brand-blue);
-      font-size: 14px;
+      color: #a8dcfa;
+      font-size: 12px;
     }
 
     .progress-value {
-      color: var(--brand-light);
+      color: #ffffff;
       font-weight: 700;
     }
 
     .progress-track {
-      height: 8px;
+      height: 7px;
       overflow: hidden;
       border-radius: 999px;
-      background: rgba(248, 250, 252, 0.15);
+      background: rgba(221, 238, 246, 0.18);
     }
 
     .progress-fill {
@@ -256,170 +261,226 @@
     .restart-button,
     .next-button {
       width: 100%;
-      margin-top: 16px;
-      border: none;
-      border-radius: 18px;
-      padding: 12px 16px;
+      border: 0;
       font-weight: 700;
       cursor: pointer;
-      transition: opacity 0.2s ease, background 0.2s ease;
-      font-family: Calibri, "Segoe UI", sans-serif;
+      transition: filter 0.18s ease, transform 0.18s ease;
     }
 
     .restart-button {
-      background: rgba(248, 250, 252, 0.1);
-      color: var(--brand-light);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 33px;
+      margin-top: 15px;
+      border-radius: 999px;
+      padding: 9px 14px;
+      background: #46616f;
+      color: #ffffff;
+      font-size: 11px;
     }
 
-    .restart-button:hover {
-      background: rgba(248, 250, 252, 0.2);
+    .restart-button svg {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 14px;
+    }
+
+    .restart-button:hover,
+    .next-button:hover {
+      filter: brightness(1.07);
     }
 
     .detail-card {
       flex: 1;
+      min-height: 720px;
       overflow: hidden;
-      border-radius: 28px;
-      background: var(--background);
-      color: var(--brand-dark);
-      box-shadow: var(--shadow-panel);
+      border-radius: 24px;
+      background: #ffffff;
+      color: #173949;
+      box-shadow: none;
       display: flex;
       flex-direction: column;
     }
 
     .detail-header {
-      padding: 20px;
-      color: var(--brand-light);
+      padding: 19px 19px 18px;
+      color: #ffffff;
       transition: background 0.25s ease;
     }
 
-    .detail-header.teal {
-      background: var(--brand-teal);
-    }
-
-    .detail-header.orange {
-      background: var(--brand-orange);
-    }
+    .detail-header.teal { background: #3ba6a5; }
+    .detail-header.orange { background: #f18a31; }
 
     .detail-header h2 {
       margin: 0;
-      font-size: 22px;
-      font-family: Calibri, "Segoe UI", sans-serif;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
     }
 
     .detail-header p {
       margin: 8px 0 0;
-      font-size: 14px;
-      opacity: 0.92;
-      line-height: 1.5;
+      font-size: 12px;
+      line-height: 1.45;
+      opacity: 1;
     }
 
     .detail-body {
-      padding: 20px;
+      padding: 20px 18px 18px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       flex: 1;
     }
 
-    .detail-body p {
+    .detail-body > p {
       margin: 0;
-      font-size: 15px;
-      line-height: 1.65;
+      font-size: 12px;
+      line-height: 1.75;
+      color: #0f3346;
     }
 
     .talk-track {
-      border: 1px solid var(--brand-blue);
-      border-radius: 20px;
-      background: var(--brand-light);
-      padding: 16px;
+      border: 1px solid #9cc9e4;
+      border-radius: 17px;
+      background: #f4f7f9;
+      padding: 14px;
     }
 
     .talk-track-title {
       margin-bottom: 8px;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
+      color: #0f3346;
     }
 
     .talk-track p {
-      font-size: 13px;
-      line-height: 1.6;
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.65;
+      color: #173949;
     }
 
     .next-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 40px;
       margin-top: auto;
-      background: var(--brand-dark);
-      color: var(--brand-light);
+      border-radius: 999px;
+      padding: 11px 16px;
+      background: #21495c;
+      color: #ffffff;
+      font-size: 11px;
     }
 
-    .next-button:hover {
-      opacity: 0.9;
+    .next-button svg {
+      width: 13px;
+      height: 13px;
+      flex: 0 0 13px;
+    }
+
+    .flow-card {
+      padding: 20px 18px 17px;
     }
 
     .flow-title {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 14px;
-      font-size: 20px;
+      margin-bottom: 13px;
+      font-size: 18px;
+      line-height: 1.1;
       font-weight: 700;
+      color: #ffffff;
+    }
+
+    .flow-title svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 17px;
+      stroke: var(--brand-orange);
     }
 
     .flow-step {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 9px;
+      margin-bottom: 8px;
+    }
+
+    .flow-step:last-child {
+      margin-bottom: 0;
     }
 
     .flow-number {
-      width: 24px;
-      height: 24px;
-      flex: 0 0 24px;
+      width: 21px;
+      height: 21px;
+      flex: 0 0 21px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 999px;
-      background: var(--brand-mint);
-      color: var(--brand-dark);
-      font-size: 12px;
+      border-radius: 50%;
+      background: #c9fff2;
+      color: #173949;
+      font-size: 11px;
       font-weight: 700;
     }
 
     .flow-text {
-      color: var(--brand-blue);
-      font-size: 13px;
-      line-height: 1.4;
+      padding-top: 2px;
+      color: #9ed9fa;
+      font-size: 11px;
+      line-height: 1.35;
     }
 
     @media (max-width: 980px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
-      .browser-panel {
-        min-height: auto;
-      }
-    }
-
-    @media (max-width: 600px) {
       .page {
         padding: 14px;
       }
 
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-card {
+        min-height: 520px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 34px;
+      }
+
+      .intro {
+        font-size: 15px;
+      }
+
       .browser-top {
-        padding: 12px;
+        height: 56px;
+        padding: 0 14px;
       }
 
       .address-bar {
-        font-size: 12px;
+        font-size: 11px;
+      }
+
+      .image-wrapper {
+        padding: 12px;
       }
 
       .hotspot {
         width: 30px;
         height: 30px;
         font-size: 12px;
+        line-height: 24px;
       }
     }
+
   </style>
 </head>
 
@@ -427,7 +488,13 @@
   <div class="page">
     <div class="container">
       <header>
-        <div class="badge">✨ Interactive Workiva chain walkthrough</div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="2.2" stroke-width="1.8"/>
+          </svg>
+          <span>Interactive Workiva chain walkthrough</span>
+        </div>
 
         <h1>Tax Pack Refresh Chain Demo</h1>
 
@@ -500,7 +567,10 @@
             </div>
 
             <button class="restart-button" id="restartButton">
-              ↻ Restart walkthrough
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 8V4m0 0h4M5 4l3.2 3.2A7 7 0 1 1 5.8 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Restart walkthrough</span>
             </button>
           </div>
 
@@ -520,18 +590,27 @@
               <div class="talk-track">
                 <div class="talk-track-title">Client-friendly talk track</div>
                 <p>
-                  This step helps make the refresh process repeatable and controlled. Instead of manually opening each tax pack, the chain applies the selected refresh logic and records the outcome for review.
+                  “This step helps make the refresh process repeatable and controlled. Instead of manually opening each tax pack, the chain applies the selected refresh logic and records the outcome for review.”
                 </p>
               </div>
 
               <button class="next-button" id="nextButton">
-                Next explanation ›
+                <span>Next explanation</span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
               </button>
             </div>
           </div>
 
           <div class="flow-card">
-            <div class="flow-title">▶ Suggested demo flow</div>
+            <div class="flow-title">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke-width="1.8"/>
+                <path d="m10 8 6 4-6 4V8Z" stroke-width="1.6" stroke-linejoin="round"/>
+              </svg>
+              <span>Suggested demo flow</span>
+            </div>
             <div id="journeyList"></div>
           </div>
         </aside>

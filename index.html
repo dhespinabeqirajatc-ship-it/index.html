@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tax Pack Refresh Chain - Interactive Walkthrough</title>
+
+  <meta
+    name="description"
+    content="Click numbered hotspots on the Workiva chain diagram to walk clients through each step of the tax pack refresh automation."
+  />
+
+  <style>
+    :root {
+      --brand-orange: #e89b3d;
+      --brand-light: #f8fafc;
+      --brand-mint: #d9f5ef;
+      --brand-blue: #a9c7dc;
+      --brand-dark: #243f4f;
+      --brand-teal: #3aa6a6;
+      --background: #ffffff;
+      --gradient-brand: linear-gradient(135deg, var(--brand-dark), #162833);
+      --shadow-panel: 0 24px 60px -20px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--gradient-brand);
+      color: var(--brand-light);
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(248, 250, 252, 0.1);
+      color: var(--brand-mint);
+      font-size: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -1px;
+    }
+
+    .intro {
+      margin-top: 12px;
+      max-width: 760px;
+      color: var(--brand-blue);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+      gap: 24px;
+      margin-top: 24px;
+      align-items: stretch;
+    }
+
+    .browser-panel {
+      overflow: hidden;
+      border-radius: 28px;
+      background: var(--brand-light);
+      box-shadow: var(--shadow-panel);
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .browser-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(169, 199, 220, 0.5);
+      background: var(--brand-light);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+    }
+
+    .red {
+      background: #f87171;
+    }
+
+    .yellow {
+      background: #facc15;
+    }
+
+    .green {
+      background: #4ade80;
+    }
+
+    .address-bar {
+      flex: 1;
+      margin-left: 12px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--brand-dark);
+      font-size: 14px;
+    }
+
+    .image-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      background: var(--brand-light);
+    }
+
+    .image-area {
+      position: relative;
+      width: 100%;
+      max-width: 760px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .image-area img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .hotspot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 3px solid #ffffff;
+      color: var(--brand-light);
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 2;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+    }
+
+    .hotspot:hover {
+      transform: translate(-50%, -50%) scale(1.12);
+    }
+
+    .hotspot.teal {
+      background: var(--brand-teal);
+    }
+
+    .hotspot.orange {
+      background: var(--brand-orange);
+    }
+
+    .hotspot.active {
+      border-color: var(--brand-orange);
+      box-shadow: 0 0 0 5px rgba(217, 245, 239, 0.8), 0 10px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .hotspot.completed:not(.active) {
+      border-color: var(--brand-mint);
+    }
+
+    .hotspot::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 999px;
+      background: inherit;
+      opacity: 0.25;
+      z-index: -1;
+      animation: ping 1.6s infinite;
+    }
+
+    @keyframes ping {
+      0% {
+        transform: scale(1);
+        opacity: 0.35;
+      }
+      75%,
+      100% {
+        transform: scale(1.8);
+        opacity: 0;
+      }
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .progress-card,
+    .flow-card {
+      border: 1px solid rgba(248, 250, 252, 0.15);
+      border-radius: 28px;
+      background: rgba(248, 250, 252, 0.1);
+      padding: 20px;
+      box-shadow: var(--shadow-panel);
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: var(--brand-blue);
+      font-size: 14px;
+    }
+
+    .progress-value {
+      color: var(--brand-light);
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(248, 250, 252, 0.15);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: var(--brand-orange);
+      transition: width 0.35s ease;
+    }
+
+    .restart-button,
+    .next-button {
+      width: 100%;
+      margin-top: 16px;
+      border: none;
+      border-radius: 18px;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s ease

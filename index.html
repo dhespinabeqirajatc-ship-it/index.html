@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Workiva XBRL Tagging Demo</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="rail"><div class="w">w</div><button>＋</button><button>⌂</button><button>□</button><button>▤</button><button>◉</button><button>⌘</button></aside>
+  <section class="workspace">
+    <header class="titlebar"><div class="tabs"><button class="doc-tab active" data-doc="report">▤ 2025 - Avikro Demo - Doc ×</button><button class="doc-tab" data-doc="kvk">▤ KVK Mandatory Facts ×</button></div><div>✦　?　●　<span class="company">AC　Advance Tax Co...</span></div></header>
+    <nav class="menu"><button>File</button><button>Edit</button><button>Data</button><button>View</button><button>Review</button><button class="active">XBRL/XML</button><button>Markup</button></nav>
+    <div class="ribbon">
+      <div class="tool publish">▰<small>Publish</small></div>
+      <label class="toggle-tool"><span class="switch"><input id="show-xbrl" type="checkbox"><i></i></span><small>Show XBRL</small></label>
+      <div class="profile">KVK iXBRL IFRS <b>2025</b><small>Profile</small></div>
+      <div class="tool">⚙<small>Settings</small></div><div class="tool">🌐<small>English</small></div><div class="tool">Off<small>XBRL Review</small></div>
+      <div class="tool muted">🏷<small>Create Fact</small></div><div class="tool">▥<small>Attributes</small></div><div class="tool">📍<small>Locate</small></div>
+      <div class="tool">Labels<small>Concept Display</small></div><div class="tool">●<small>Cell Highlights</small></div><button id="generate" class="tool buttonish">↻<small>Generate</small></button>
+    </div>
+
+    <main id="report-doc" class="document active">
+      <aside id="outline" class="left-panel hidden"><h3>XBRL Outline</h3><div class="outline-actions">⌄　↥　↧　≡　☰</div><ul><li>Statement of comprehensive income...</li><li class="indent">Statement of comprehensive income, profit or loss...</li><li class="indent2 tagged-item">Revenue</li><li class="indent2">Cost of sales</li><li class="indent2 calc-item">Gross profit</li><li class="indent2">Other income</li><li>Statement of financial position...</li><li>Statement of cash flows...</li></ul></aside>
+      <section class="page-area">
+        <div class="page"><div class="crumb">Consolidated Financial Statements</div><h1>Consolidated Financial Statements</h1><h2>Consolidated Statement of Profit and Loss</h2><p>For the year ended <u>31 December 2025</u></p>
+          <table id="pl-table"><thead><tr><th></th><th>Note</th><th>2025</th><th>2024</th></tr></thead><tbody>
+            <tr><td>Revenue</td><td>2</td><td class="fact candidate" data-value="71076000000">71,076</td><td class="fact tagged" data-value="71076000000">71,076</td></tr>
+            <tr><td>Cost of Sales</td><td></td><td class="fact tagged">(8,257)</td><td class="fact tagged">(9,303)</td></tr>
+            <tr class="sum"><td>Gross Profit</td><td></td><td class="fact tagged calc">53,992</td><td class="fact tagged calc">61,773</td></tr>
+            <tr><td>Gains less losses from financial investments</td><td></td><td class="fact tagged">23</td><td class="fact tagged">78</td></tr>
+            <tr><td>Other operating income</td><td></td><td class="fact tagged">23</td><td class="fact tagged">75</td></tr>
+            <tr class="sum"><td>Operating Profit</td><td></td><td class="fact tagged calc">54,037</td><td class="fact tagged calc">61,926</td></tr>
+            <tr><td>Other operating expenses</td><td></td><td class="fact tagged">(3,917)</td><td class="fact tagged">(4,415)</td></tr>
+            <tr><td>Other income (expense) net</td><td></td><td class="fact tagged">(22)</td><td class="fact tagged">(88)</td></tr>
+            <tr class="sum"><td>Profit before tax</td><td></td><td class="fact tagged calc">50,098</td><td class="fact tagged calc">57,423</td></tr>
+            <tr><td>Taxation</td><td></td><td class="fact tagged">312</td><td class="fact tagged">2,900</td></tr>
+            <tr class="sum"><td>Profit for the period</td><td></td><td class="fact tagged calc">49,786</td><td class="fact tagged calc">54,523</td></tr>
+            <tr class="space"><td colspan="4"></td></tr><tr><td>Basic earnings per ordinary share</td><td></td><td class="fact tagged">3.10</td><td class="fact tagged">3.56</td></tr>
+            <tr><td>Average shares outstanding (thousands)</td><td></td><td class="fact tagged">16,100,000,000</td><td class="fact tagged">16,100,000,000</td></tr>
+          </tbody></table>
+        </div>
+      </section>
+      <aside id="facts" class="right-panel hidden"><h3>Fact Details</h3><p class="selected-count">1 fact selected</p><label>Concept *</label><button id="concept-btn" class="selectbox">Select Concept</button><label>Dimensions</label><button id="dimension-btn" class="selectbox">Select Dimension</button><label>Date *</label><button id="date-btn" class="smallbtn">Add Date Range</button><dl><dt>Source Value</dt><dd id="source-value">71,076</dd><dt>Fact Value</dt><dd>71076000000</dd><dt>Accuracy</dt><dd>-6 (Millions)</dd><dt>Units</dt><dd>Euro</dd></dl><h4>Fact Options</h4><label><input type="checkbox" checked> Include if Zero</label><label><input type="checkbox" checked> Include if Nil</label></aside>
+    </main>
+
+    <main id="kvk-doc" class="document">
+      <aside class="kvk-outline"><h3>KVK Mandatory Facts</h3><div class="section-selected">Section</div></aside><section class="page-area"><div class="page kvk"><div class="crumb">Section</div><table><tr><td>Name of the legal entity</td><td>Avikro ESEF</td></tr><tr><td>Legal form of the legal entity</td><td>Public Limited Company</td></tr><tr><td>Registered office of the legal entity</td><td>Rotterdam</td></tr><tr><td>Registration number at the Chamber of Commerce</td><td>12345678</td></tr><tr><td>Legal entity size</td><td>Large</td></tr><tr><td>End date of the financial reporting period</td><td>31/12/2025</td></tr><tr><td>Financial reporting period</td><td>2025</td></tr><tr><td>Financial statements are consolidated</td><td>Yes</td></tr><tr><td>Auditor's report is present</td><td>Yes</td></tr><tr><td>Financial statements adopted (Y/N)</td><td>Yes</td></tr><tr><td>Date of adoption</td><td>31/12/2026</td></tr></table></div></section>
+    </main>
+
+    <button id="generations-icon" class="floating-icon" title="XBRL Document Generations">↻</button>
+    <aside id="generations" class="generations hidden"><div class="panel-head"><h3>XBRL Document Generations</h3><button id="close-generations">×</button></div><h4>KVK iXBRL IFRS 2025</h4><div class="changes"><b>Changes since last generation</b><p>✕ XBRL Changes<br>▣ Document Changes</p></div><div class="generation-list"><article><b>Document Generation 23</b><p>🔴 9　🟠 18　🟢 0　183 Facts</p><small>Jul 28, 2026 2:57 PM, 40s</small></article><article><b>Document Generation 22</b><p>🔴 15　🟠 22　🟢 0　153 Facts</p><small>Jul 28, 2026 2:14 PM, 44s</small></article><article><b>Document Generation 21</b><p>🔴 15　🟠 22　🟢 0　153 Facts</p><small>Jul 28, 2026 2:07 PM, 50s</small></article></div></aside>
+  </section>
+</div>
+
+<div id="context-menu" class="context hidden"><button>Footnote　›</button><button>Link options　›</button><hr><button>Cut</button><button>Copy</button><button>Paste</button><hr><button>Add data　›</button><button>Add attachment</button><button>Add comment</button><button>Create Bookmark</button><button class="disabled">Paste Facts (0)</button><button id="create-fact">Create Fact</button></div>
+
+<div id="concept-modal" class="modal hidden"><div class="dialog"><button class="x">×</button><h2>Concept Selector</h2><input placeholder="Find concepts"><div class="tabs2"><button>Search 0</button><button class="active">Browse 138</button><button>Bookmarks 3</button><button>Extensions 10</button></div><div class="tree"><p>▾ [310000] Statement of comprehensive income, profit or loss, by function of expense</p><p class="indent">▾ Profit (loss) [abstract]</p><button id="choose-revenue" class="treechoice">● Revenue</button><p class="indent2">● Cost of sales</p><p class="indent2">● Gross profit</p></div><footer><button class="cancel">Cancel</button><button id="apply-concept" disabled>Apply</button></footer></div></div>
+<div id="dimension-modal" class="modal hidden"><div class="dialog"><button class="x">×</button><h2>Concept Selector</h2><input placeholder="Find concepts"><div class="tabs2"><button>Search 0</button><button>Browse 138</button><button class="active">Bookmarks 1</button></div><p><b>Consolidated and separate financial statements [axis]</b><br><small>IFRS-FULL　Axis</small></p><button id="choose-axis" class="treechoice">Select this axis</button><footer><button class="cancel">Cancel</button><button id="apply-dimension" disabled>Apply</button></footer></div></div>
+<div id="member-modal" class="modal hidden"><div class="dialog"><button class="x">×</button><h2>Concept Selector</h2><div class="tabs2"><button>Search 0</button><button>Browse 605</button><button class="active">Bookmarks 1</button></div><button id="choose-member" class="treechoice"><b>Consolidated [member]</b><br><small>IFRS-FULL　Domain</small></button><footer><button class="cancel">Cancel</button><button id="apply-member" disabled>Apply</button></footer></div></div>
+<div id="date-modal" class="modal hidden"><div class="dialog"><button class="x">×</button><h2>XBRL Dates</h2><div class="tabs2"><button class="active">Fiscal</button><button>Special</button></div><div class="dates"><button id="date-choice">1/1/2025 - 12/31/2025</button><button>1/1/2024 - 12/31/2024</button><button>1/1/2023 - 12/31/2023</button></div><footer><button class="cancel">Cancel</button><button id="apply-date" class="green">Apply</button></footer></div></div>
+<div id="toast" class="toast hidden"></div>
+<script src="app.js"></script>
+</body></html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interactive Workiva-style workflow demo" />
+  <title>Connected Reporting Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">W</div>
+        <div>
+          <strong>Connected Reporting</strong>
+          <span>Interactive demo</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Demo sections">
+        <button class="nav-button active" data-view="chain-view">
+          <span class="nav-icon">⛓</span>
+          Chain
+        </button>
+        <button class="nav-button" data-view="spreadsheet-view">
+          <span class="nav-icon">▦</span>
+          Spreadsheet
+        </button>
+        <button class="nav-button" data-view="report-view">
+          <span class="nav-icon">▤</span>
+          Report
+        </button>
+      </nav>
+
+      <div class="sidebar-note">
+        <strong>Demo environment</strong>
+        <p>This is a simulated workflow. No live platform credentials or customer data are used.</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <h1 id="page-title">Refresh connections chain</h1>
+        </div>
+      </header>
+
+      <section id="chain-view" class="view active" aria-labelledby="page-title">
+        <div class="workiva-shell">
+          <aside class="workiva-sidebar">
+            <div class="workiva-logo"><strong>wdata</strong> chains</div>
+            <button class="workiva-create">⊕&nbsp;&nbsp; Create</button>
+            <nav class="workiva-menu" aria-label="Workiva navigation">
+              <span>⌂ <b>Home</b></span>
+              <span>⌕ <b>Environments</b></span>
+              <span>⌘ <b>Chains</b></span>
+              <span>▱ <b>Templates</b></span>
+              <span class="selected">⌁ <b>Monitor</b></span>
+              <span>≡ <b>Approvals</b></span>
+              <span>◷ <b>Schedules</b></span>
+              <span>↔ <b>Connections</b></span>
+              <span>◉ <b>Resources</b></span>
+              <span>••• <b>Data Prep</b></span>
+              <span>◇ <b>Wdata</b></span>
+              <span>↗ <b>Workiva</b></span>
+            </nav>
+          </aside>
+
+          <div class="workiva-main">
+            <div class="workiva-product-bar">
+              <span>⌕</span>
+              <strong>UAT</strong>
+            </div>
+
+            <div id="chain-runtime-screen" class="chain-screen">
+              <div class="runtime-header">
+                <div>
+                  <h2>Primary Chain - Refreshing connections</h2>
+                  <p>Enter runtime inputs to execute</p>
+                </div>
+                <div class="runtime-actions">
+                  <button class="workiva-link-button" type="button">Back</button>
+                  <button id="workiva-start" class="workiva-primary-button" type="button">Start</button>
+                </div>
+              </div>
+
+              <div class="runtime-form">
+                <label class="floating-field">
+                  <span>Name the Folder starts with</span>
+                  <div class="field-row">
+                    <input id="folder-name" value="Q4 2025 - Test Chain" aria-label="Folder name" />
+                    <span class="field-chevron">‹ ›</span>
+                  </div>
+                </label>
+                <p class="field-help">
+                  Note: Please provide the name of the child folder that directly contains the tax package spreadsheets.
+                  Do not select the parent folder if the tax packages are stored within a subfolder, as the chain will only
+                  process spreadsheets located in the specified folder.
+                </p>
+
+                <label class="floating-field">
+                  <span>Which connections do you wish to refresh</span>
+                  <div class="field-row">
+                    <select id="refresh-option" aria-label="Connections to refresh">
+                      <option value="">Select a connection group</option>
+                      <option value="incoming" selected>Incoming Connections</option>
+                                            <option value="all">All Connections</option>
+                    </select>
+                    <span class="field-chevron">⌄</span>
+                  </div>
+                </label>
+                <p class="field-help">Please select which connections you wish to refresh in the packs.</p>
+              </div>
+            </div>
+
+            <div id="chain-run-screen" class="chain-screen hidden">
+              <div class="run-summary">
+                <div>
+                  <h2>Primary Chain - Refreshing connections</h2>
+                  <span>Run Details</span>
+                  <div class="run-detail-grid">
+                    <span id="run-overall-icon" class="run-overall pending">•</span>
+                    <p>Run by Demo User</p>
+                    <p id="run-started">Started just now</p>
+                    <p id="run-ended">Running</p>
+                    <p id="run-duration">Duration 0 seconds</p>
+                  </div>
+                </div>
+                <div class="run-buttons">
+                  <button type="button">Edit Chain</button>
+                  <button type="button" class="outline">Run History</button>
+                  <button id="back-to-execute" type="button">Back To Execute</button>
+                </div>
+              </div>
+
+              <div class="canvas-toolbar">
+                <button type="button">‹</button>
+                <button type="button">›</button>
+              </div>
+
+              <div class="chain-canvas">
+                <div class="chain-graph" id="chain-graph">
+                  <div class="graph-start-label">START</div>
+
+                  <article class="graph-node" data-node="runtime">
+                    <div class="graph-circle">☝</div>
+                    <div class="graph-copy">Runtime Inputs</div>
+                    <span class="graph-check">✓</span>
+                  </article>
+                  <div class="graph-line"></div>
+
+                  <article class="graph-node" data-node="token">
+                    <div class="graph-circle">◎</div>
+                    <div class="graph-copy">POST - Get Bearer Token</div>
+                    <span class="graph-check">✓</span>
+                  </article>
+                  <div class="graph-line"></div>
+
+                  <article class="graph-node" data-node="folders">
+                    <div class="graph-circle">◎</div>
+                    <div class="graph-copy">GET all folders</div>
+                    <span class="graph-check">✓</span>
+                  </article>
+                  <div class="graph-line"></div>
+
+                  <article class="graph-node" data-node="array-folder">
+                    <div class="graph-circle">{;}</div>
+                    <div class="graph-copy">Array to CSV (Folder)</div>
+                    <span class="graph-check">✓</span>
+                  </article>
+                  <div class="graph-line"></div>
+
+                  <article class="graph-node" data-node="filter">
+                    <div class="graph-circle">▧</div>
+                    <div class="graph-copy">Smart Filter Rows (Folder)</div>
+                    <span class="graph-check">✓</span>
+                  </article>
+                  <div class="graph-line"></div>
+
+                  <article class="graph-node" data-node="folder-info">
+                    <div class="graph-circle">◎</div>
+                    <div class="graph-copy">GET folder info with ID</div>
+                    <span class="graph-check">✓</span>
+                  </article>
+                  <div class="graph-line"></div>
+
+                  <article class="graph-node" data-node="selected-folder">
+                    <div class="graph-circle">{;}</div>
+                    <div class="graph-copy">Array to CSV (Content of Selected Folder)</div>
+                    <span class="graph-check">✓</span>
+                  </article>
+                  <div class="graph-line"></div>
+
+                  <article class="graph-node" data-node="refresh">
+                    <div class="graph-circle">↻</div>
+                    <div class="graph-copy">Refresh selected connections</div>
+                    <span class="graph-check">✓</span>
+                  </article>
+                </div>
+
+                <div class="zoom-control">
+                  <button type="button">−</button>
+                  <strong>70%</strong>
+                  <button type="button">+</button>
+                  <button type="button">⌗</button>
+                  <button type="button">⌕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="spreadsheet-view" class="view">
+        <div class="ws-app">
+          <aside class="ws-iconbar">
+            <div class="ws-w">w</div>
+            <button>＋</button><button>⌂</button><button>□</button><button>◉</button>
+            <button>▤</button><button>▦</button><button>◇</button><button>⌘</button>
+          </aside>
+
+          <div class="ws-workspace">
+            <header class="ws-titlebar">
+              <div class="ws-doc-title"><span class="ws-sheet-icon">▦</span> Tax Pack template DE61 <span>×</span></div>
+              <div class="ws-title-actions">⌕　✦　?　●　<span class="ws-company">HC&nbsp;&nbsp; Hallway Corporation</span></div>
+            </header>
+
+            <nav class="ws-tabs">
+              <button>File</button><button class="active">Edit</button><button>Data</button><button>View</button><button>Review</button>
+            </nav>
+
+            <div class="ws-ribbon">
+              <div class="ribbon-group"><button class="publish">▰</button><small>Publish</small></div>
+              <div class="ribbon-group"><button>↶</button><small>Undo</small></div>
+              <div class="ribbon-group"><button>↷</button><small>Redo</small></div>
+              <div class="ribbon-divider"></div>
+              <div class="ribbon-group wide"><button>⚙</button><small>Properties</small></div>
+              <select><option>Table (Normal)</option></select>
+              <select><option>Calibri</option></select>
+              <select class="short"><option>9</option></select>
+              <div class="ribbon-icons">A　✎　B　<i>I</i>　<u>U</u>　≡　▦　$　%　Σ</div>
+            </div>
+
+            <div class="ws-body">
+              <aside class="ws-tree">
+                <div class="ws-tree-heading">
+                  <strong>Tax Pack template DE61</strong>
+                  <div>↥　↧　≡　☰　○　⌁</div>
+                </div>
+                <div class="tree-scroll">
+                  <div class="tree-item group">⌄　⚒ Data</div>
+                  <div class="tree-item indent">FX Import</div>
+                  <div class="tree-item indent">Table Incoming</div>
+                  <div class="tree-item indent">Analytical output</div>
+                  <div class="tree-item indent">Analytical information</div>
+                  <div class="tree-item indent">Wdata Output RF</div>
+                  <div class="tree-item indent">Wdata Export</div>
+                  <div class="tree-item indent">S4H import <span>↪</span></div>
+                  <div class="tree-item indent selected">Entity Registration <span>↪</span></div>
+                  <div class="tree-item group">⌄　⚒ Administration</div>
+                  <div class="tree-item indent">Mapping Analytical</div>
+                  <div class="tree-item group">⌄　Not in use</div>
+                  <div class="tree-item indent2">Deferred - Liability9</div>
+                  <div class="tree-item indent2">Deferred - Liability10</div>
+                  <div class="tree-item indent2">Deferred - Liability11</div>
+                  <div class="tree-item indent2">Liability9</div>
+                  <div class="tree-item indent2">Liability10</div>
+                  <div class="tree-item indent2">Liability11</div>
+                  <div class="tree-item indent2">Deferred - Asset10</div>
+                  <div class="tree-item indent2">Deferred - Asset11</div>
+                  <div class="tree-item indent2">Asset11</div>
+                </div>
+              </aside>
+
+              <main class="ws-grid-area">
+                <div class="ws-formula">
+                  <span>A1</span><span>↪</span><strong>Entity</strong>
+                </div>
+                <div class="ws-grid-scroll">
+                  <table class="ws-grid" aria-label="Entity registration spreadsheet">
+                    <thead>
+                      <tr>
+                        <th class="corner"></th>
+                        <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th>
+                      </tr>
+                    </thead>
+                    <tbody id="ws-grid-body"></tbody>
+                  </table>
+                </div>
+                <div class="ws-horizontal-scroll"><span></span></div>
+              </main>
+
+              <aside class="ws-connections">
+                <div class="connection-tabs">
+                  <button class="active">↪ Incoming</button>
+                  <button>↩ Outgoing</button>
+                </div>
+                <div class="connections-title">
+                  <h3>Connections</h3>
+                  <div>＋　↻　↕　⌁　▽　⋮</div>
+                </div>
+
+                <article class="ws-connection-card" data-ws-connection="s4h">
+                  <div class="connection-card-head">
+                    <strong>S4H import</strong>
+                    <div>
+                      <span class="connection-refresh display-only" data-refresh="s4h" aria-label="Connection refresh status">↻</span>
+                      <button>⌄</button>
+                    </div>
+                  </div>
+                  <span>Source:</span>
+                  <div><a>SAP</a> <em>Query</em></div>
+                  <p class="connection-last"><b class="green-dot">✓</b> Last refreshed:<br>August 3, 11:10 AM by Dhespina Beqiraj</p>
+                </article>
+
+                <article class="ws-connection-card" data-ws-connection="overview">
+                  <div class="connection-card-head">
+                    <strong>CopiedConnection</strong>
+                    <div>
+                      <span class="connection-refresh display-only" data-refresh="overview" aria-label="Connection refresh status">↻</span>
+                      <button>⌄</button>
+                    </div>
+                  </div>
+                  <span>Source:</span>
+                  <div><a>Overview</a> <em>Sheet</em></div>
+                  <p class="connection-last"><b class="green-dot">✓</b> Last refreshed:<br>August 3, 11:10 AM by Dhespina Beqiraj</p>
+                </article>
+
+                <article class="ws-connection-card" data-ws-connection="sheet1">
+                  <div class="connection-card-head">
+                    <strong>CopiedConnection</strong>
+                    <div>
+                      <span class="connection-refresh display-only" data-refresh="sheet1" aria-label="Connection refresh status">↻</span>
+                      <button>⌄</button>
+                    </div>
+                  </div>
+                  <span>Source:</span>
+                  <div><a>Sheet1</a> <em>Sheet</em></div>
+                  <p class="connection-last"><b class="green-dot">✓</b> Last refreshed:<br>August 3, 11:10 AM by Dhespina Beqiraj</p>
+                </article>
+              </aside>
+            </div>
+
+            <footer class="ws-statusbar">
+              <span></span>
+              <div>⌕　⌕　 <strong>100%</strong>　⌄　♙</div>
+            </footer>
+          </div>
+
+          <div id="ws-refresh-toast" class="ws-refresh-toast hidden" role="status" aria-live="polite">
+            <div class="toast-info">i</div>
+            <div class="toast-content">
+              <div class="toast-progress"><span id="ws-progress-bar"></span></div>
+              <span id="ws-toast-text">Refreshing Connection</span>
+            </div>
+            <button id="ws-toast-close">×</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="report-view" class="view">
+        <div class="wr-app">
+          <aside class="wr-iconbar">
+            <div class="wr-w">w</div>
+            <button>＋</button><button>⌂</button><button>□</button><button>◉</button>
+            <button>▤</button><button>▦</button><button>◇</button><button>⌘</button>
+          </aside>
+
+          <div class="wr-workspace">
+            <header class="wr-titlebar">
+              <div class="wr-open-tabs">
+                <div class="wr-tab active"><span class="wr-sheet-icon">▦</span> Tax report <span>×</span></div>
+              </div>
+              <div class="wr-title-actions">⌕　✦　?　●　<span class="wr-company">HC&nbsp;&nbsp; Hallway Corporation</span></div>
+            </header>
+
+            <nav class="wr-tabs">
+              <button>File</button><button class="active">Edit</button><button>Data</button><button>View</button><button>Review</button>
+            </nav>
+
+            <div class="wr-ribbon">
+              <div class="wr-publish-wrap">
+                <button id="wr-publish-button" class="wr-publish-button" disabled title="Publish linked updates">
+                  <span>▰</span><span class="publish-caret">⌄</span>
+                </button>
+                <small>Publish</small>
+              </div>
+              <div class="wr-ribbon-group"><button>↶</button><small>Undo</small></div>
+              <div class="wr-ribbon-group"><button>↷</button><small>Redo</small></div>
+              <div class="wr-divider"></div>
+              <div class="wr-ribbon-group"><button>⚙</button><small>Properties</small></div>
+              <select><option>Table (Normal)</option></select>
+              <select><option>Calibri</option></select>
+              <select class="short"><option>9</option></select>
+              <div class="wr-ribbon-icons">A　✎　B　<i>I</i>　<u>U</u>　≡　▦　$　%　Σ</div>
+            </div>
+
+            <div class="wr-body">
+              <aside class="wr-outline">
+                <div class="wr-outline-heading">
+                  <strong>Q4 2025 Consolidated report (1)</strong>
+                  <div>↥　↧　≡　☰　○　⌁</div>
+                </div>
+                <div class="wr-outline-scroll">
+                  <div class="wr-outline-item indent">ETR GC - Group 1 - NL - Q</div>
+                  <div class="wr-outline-item indent">ETR GC - Group 2 - EMEA</div>
+                  <div class="wr-outline-item indent">ETR GC - Group 3 - APAC</div>
+                  <div class="wr-outline-item indent">ETR GC - Group 4 - AME</div>
+                  <div class="wr-outline-item indent">ETR GC - Group 5 - Corp</div>
+                  <div class="wr-outline-item group">⌄　<span class="purple-dot"></span> Current Income Tax Position ...</div>
+                  <div class="wr-outline-item indent2">YTD Current Tax</div>
+                  <div class="wr-outline-item indent3">YTD - Current Income Tax</div>
+                  <div class="wr-outline-item indent3">Q1 - Current Income Tax ...</div>
+                  <div class="wr-outline-item indent3">Q2 - Current Income Tax ...</div>
+                  <div class="wr-outline-item indent3">Q3 - Current Income Tax ...</div>
+                  <div class="wr-outline-item indent3">Q4 - Current Income Tax ...</div>
+                  <div class="wr-outline-item group">⌄　Q-only</div>
+                  <div class="wr-outline-item indent3">Q2 - Current Income Tax ...</div>
+                  <div class="wr-outline-item indent3">Q3 - Current Income Tax ...</div>
+                  <div class="wr-outline-item indent3">Q4 - Current Income Tax ...</div>
+                  <div class="wr-outline-item group">⌄　<span class="purple-dot"></span> DTA/DTL</div>
+                  <div class="wr-outline-item indent2">DTA/DTL - Q1</div>
+                  <div class="wr-outline-item indent2">DTA/DTL - Q2</div>
+                  <div class="wr-outline-item indent2">DTA/DTL - Q3</div>
+                  <div class="wr-outline-item indent2 selected">
+                    DTA/DTL - Q4
+                    <button id="wr-link-indicator" class="wr-link-indicator hidden" title="Linked updates available">↗</button>
+                  </div>
+                </div>
+              </aside>
+
+              <main class="wr-grid-area">
+                <div class="wr-formula">
+                  <span>A16</span><span>×</span><span>✓</span><span>ƒx</span>
+                </div>
+                <div class="wr-grid-scroll">
+                  <table class="wr-grid" aria-label="Consolidated report spreadsheet">
+                    <thead>
+                      <tr>
+                        <th class="corner"></th>
+                        <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th><th>L</th><th>M</th><th>N</th><th>O</th><th>P</th>
+                      </tr>
+                    </thead>
+                    <tbody id="wr-grid-body"></tbody>
+                  </table>
+                </div>
+                <div class="wr-horizontal-scroll"><span></span></div>
+              </main>
+
+              <aside class="wr-properties">
+                <div class="wr-prop-tabs">
+                  <button>Library</button><button class="active">Properties</button><button>Details</button>
+                </div>
+                <div class="wr-property-content">
+                  <h3>Link properties</h3>
+                  <div class="wr-property-section">
+                    <strong>☑ Source</strong>
+                    <span>Q4 2025 Consolidated report (1)</span>
+                    <b>K18 / DTA/DTL - Q4</b>
+                  </div>
+                  <div class="wr-property-section destination">
+                    <strong>☑ Destinations (1)</strong>
+                    <span>Tax note (1)</span>
+                    <b>G15 / Deferred</b>
+                  </div>
+
+                  <div id="wr-update-card" class="wr-update-card hidden">
+                    <div class="wr-update-head">
+                      <span class="wr-green-icon">✓</span>
+                      <strong>Linked updates available</strong>
+                    </div>
+                    <p>New values were received from refreshed spreadsheet connections.</p>
+                    <button id="wr-apply-update" type="button">Apply updates</button>
+                  </div>
+                </div>
+                <div class="wr-link-count">1,472 / 200,000 links in this file</div>
+              </aside>
+            </div>
+
+            <footer class="wr-statusbar">
+              <span></span>
+              <div>⌕　⌕　 <strong>100%</strong>　⌄　♙</div>
+            </footer>
+          </div>
+
+          <div id="wr-update-toast" class="wr-update-toast hidden" role="status" aria-live="polite">
+            <span class="wr-green-icon">✓</span>
+            <div>
+              <strong>Linked data updated</strong>
+              <small>The report now contains the latest figures.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+
+  <div class="hidden" aria-hidden="true">
+    <span id="global-status"></span>
+    <button id="reset-demo" type="button"></button>
+    <span id="chain-summary"></span>
+    <span id="connection-summary"></span>
+    <span id="report-summary"></span>
+    <span id="activity-time"></span>
+    <ul id="activity-log"></ul>
+    <span id="sheet-refresh-label"></span>
+    <div id="report-alert"></div>
+    <button id="refresh-report" type="button"></button>
+    <span id="sheet-revenue"></span>
+    <span id="sheet-revenue-var"></span>
+    <span id="sheet-margin"></span>
+    <span id="sheet-margin-var"></span>
+    <span id="sheet-opex"></span>
+    <span id="sheet-opex-var"></span>
+    <span id="sheet-period"></span>
+    <span id="report-period"></span>
+    <span id="report-revenue"></span>
+    <span id="report-margin"></span>
+    <span id="report-opex"></span>
+    <span id="report-revenue-note"></span>
+    <span id="report-margin-note"></span>
+    <span id="report-opex-note"></span>
+    <span id="report-version"></span>
+    <span id="report-summary-copy"></span>
+    <span id="report-commentary"></span>
+  </div>
+
+
+  <div id="demo-guide" class="demo-guide hidden" role="status" aria-live="polite">
+    <div class="demo-guide-icon">i</div>
+    <div class="demo-guide-copy">
+      <strong id="demo-guide-title">Next step</strong>
+      <span id="demo-guide-message"></span>
+    </div>
+    <button id="demo-guide-action" type="button">Open tab</button>
+    <button id="demo-guide-close" class="demo-guide-close" type="button" aria-label="Close instruction">×</button>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
